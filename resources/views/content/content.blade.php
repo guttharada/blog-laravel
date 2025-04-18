@@ -27,7 +27,7 @@
                         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M19 13.3287H13V19.3287H11V13.3287H5V11.3287H11V5.32867H13V11.3287H19V13.3287Z" fill="#000000" />
                         </svg>
-                        <span class="hide-button">Add Content</span>
+                        <a class="hide-button">Add Content</a>
                     </button>
                     <div class="input-group input-group-sm w-50">
                         <input type="text" class="form-control form-control-sm" placeholder="Enter a Search">
@@ -63,7 +63,7 @@
                             <td style="width: 7%;">{{ $content->id }}</td>
                             <td style="width: 10%;">{{ $content->topic }}</td>
                             <td style="width: 10%;">{{ $content->tags }}</td>
-                            <td style="width: 30%;">{{ $content->created_at }}</td>
+                            <td style="width: 30%;">{{ $content->created_at->format('d/m/Y H:i') }}</td>
                             <td style="width: 7%;" class="fix-btn ">
                                 <a class="btn-edit" data-bs-toggle="modal" data-bs-target="#deskModal">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -111,4 +111,107 @@
         <!----- Pagination ----->
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal " id="deskModal" tabindex="-1" aria-labelledby="deskModalLabel" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-6">Create Content</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="{{ url('content') }}" method="post">
+                @csrf
+                <div class="modal-body">
+
+                    <!-- topic -->
+                    <div class="row mb-1">
+                        <div class="col-12 input-group-sm">
+                            <label class="form-label">Topic<span class="required">*</span></label>
+                            <input type="text" name="topic" placeholder="Topic" class="form-control @error('topic') is-invalid @enderror" value="{{ old('topic') }}">
+
+                            <!-- แสดงข้อความผิดพลาดเมื่อ validation ไม่ผ่าน -->
+                            @error('topic')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- รายละเอียด -->
+                    <div class="row mb-1">
+                        <div class="col-12 input-group-sm">
+                            <label class="form-label">รายละเอียด<span class="required">*</span></label>
+                            <textarea name="description" rows="5" placeholder="รายละเอียด" class="form-control @error('description') is-invalid @enderror" value="{{ old('description') }}"></textarea>
+
+                            <!-- แสดงข้อความผิดพลาดเมื่อ validation ไม่ผ่าน -->
+                            @error('description')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- tag -->
+                    <div class="row mb-1">
+                        <div class="col-12 input-group-sm">
+                            <label class="form-label">Tag<span class="required">*</span></label>
+                            <input type="text" name="tags" placeholder="Tag" class="form-control  @error('tags') is-invalid @enderror" value="{{ old('tags') }}">
+
+                            <!-- แสดงข้อความผิดพลาดเมื่อ validation ไม่ผ่าน -->
+                            @error('tags')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-save">Save</button>
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- delUserModal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-6" id="deleteUserModalLabel">Delete</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger form-label">Do you want to delete xxx data?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class=" btn-confirm" onclick="showToast('delete')" data-bs-dismiss="modal">Delete</button>
+                <button type="button" class=" btn-cancel" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delUserModal -->
+
+@if ($errors->any())
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var myModal = new bootstrap.Modal(document.getElementById('deskModal'));
+        myModal.show();
+    });
+</script>
+@endif
+
+
+
 @endsection

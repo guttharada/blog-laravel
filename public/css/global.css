@@ -279,3 +279,14 @@ body {
         color: black !important;
     }
 }
+
+.modal-title{
+    color: #0a0f1a;
+}
+.form-label{
+    margin-bottom: 2px !important;
+    color: #0a0f1a;
+}
+.required{
+    color: red;
+}
